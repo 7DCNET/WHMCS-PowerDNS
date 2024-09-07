@@ -45,6 +45,18 @@ function reversedns_clientarea($vars) {
     // URL'den seçili serviceid'yi al
     $selectedServiceId = isset($_GET['serviceid']) ? (int)$_GET['serviceid'] : null;
 
+    if (empty($selectedServiceId) || $selectedServiceId <= 0) {
+        return array(
+            'pagetitle' => 'Reverse DNS Management',
+            'breadcrumb' => array('index.php?m=reversedns' => 'Reverse DNS Management'),
+            'templatefile' => 'clientarea',
+            'requirelogin' => true,
+            'vars' => array(
+                'error' => 'Invalid service ID provided.',
+            ),
+        );
+    }
+
     // Müşterinin ürünlerini al ve seçilen ürün ID'sine ait IP adreslerini filtrele
     $ipAddresses = array();
     $result = localAPI('GetClientsProducts', array('clientid' => $userid));
@@ -76,6 +88,7 @@ function reversedns_clientarea($vars) {
     if (isset($_POST['update_rdns'])) {
         $ipToUpdate = $_POST['update_rdns'];
         $newRDNS = $_POST['new_rdns'][$ipToUpdate];
+
 
         // Girdi doğrulama
         if (filter_var($ipToUpdate, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4) && preg_match('/^([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,}$/', $newRDNS)) {
@@ -167,6 +180,7 @@ function reversedns_clientarea($vars) {
         'error' => isset($error) ? $error : '',
         'success' => isset($success) ? $success : '',
         'redirect' => isset($redirect) ? $redirect : false,
+        'serviceid' => $selectedServiceId, // serviceid'yi burada ayarlayın
     );
 
     return array(
