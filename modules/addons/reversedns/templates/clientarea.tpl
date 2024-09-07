@@ -1,15 +1,25 @@
+
 <form method="post" action="{$WEB_ROOT}/index.php?m=reversedns&serviceid={$serviceid}">
     <div class="panel panel-default">
         <div class="panel-heading">
             <h3 class="panel-title">Reverse DNS Yönetimi</h3>
         </div>
         <div class="panel-body">
-            {if $error}
-                <div class="alert alert-danger">{$error}</div>
-            {/if}
-            {if $success}
-                <div class="alert alert-success">{$success}</div>
-            {/if}
+{if $success}
+    <div class="alert alert-success">
+        {$success}
+    </div>
+    <script type="text/javascript">
+        setTimeout(function() {
+            window.location.href = "index.php?m=reversedns";
+        }, 4000); // 4 saniye sonra yönlendir
+    </script>
+{/if}
+{if $error}
+    <div class="alert alert-danger">
+        {$error}
+    </div>
+{/if}
             <table class="table table-bordered table-striped">
                 <thead>
                     <tr>
