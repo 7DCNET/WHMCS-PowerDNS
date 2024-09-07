@@ -1,8 +1,7 @@
-
 <form method="post" action="{$WEB_ROOT}/index.php?m=reversedns&serviceid={$serviceid}">
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h3 class="panel-title">Reverse DNS Yönetimi</h3>
+            <h3 class="panel-title">Reverse DNS Manage</h3>
         </div>
         <div class="panel-body">
 {if $success}
@@ -23,10 +22,10 @@
             <table class="table table-bordered table-striped">
                 <thead>
                     <tr>
-                        <th>IP Adresi</th>
-                        <th>Mevcut Reverse DNS</th>
-                        <th>Yeni Reverse DNS</th>
-                        <th>İşlem</th>
+                        <th>IP Address</th>
+                        <th>Available Reverse DNS</th>
+                        <th>New Reverse DNS</th>
+                        <th>Process</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -38,7 +37,7 @@
                             <input type="text" name="new_rdns[{$ip.address}]" value="{$ip.current_rdns}" class="form-control" />
                         </td>
                         <td>
-                            <button type="submit" name="update_rdns" value="{$ip.address}" class="btn btn-primary">Güncelle</button>
+                            <button type="submit" name="update_rdns" value="{$ip.address}" class="btn btn-primary">Update</button>
                         </td>
                     </tr>
                     {/foreach}
