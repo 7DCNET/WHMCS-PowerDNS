@@ -14,8 +14,8 @@
 - **Eklentiler (Addons) > Eklenti Modülleri (Addon Modules)** bölümüne gidin.
 - "Reverse DNS Yönetimi" modülünü bulun ve **Etkinleştir (Activate)** butonuna tıklayın.
 - **Yapılandır (Configure)** seçeneğine tıklayarak PowerDNS API URL'sini ve API anahtarınızı girin:
-	- PowerDNS API URL: https://powerdns-server/api/v1
-	- PowerDNS API Anahtarı: N0p5WHZvcmFMT2tzc0VH (Sizin sağladığınız API anahtarı)
+	- PowerDNS API URL: http://powerdns-server/api/v1
+	- PowerDNS API Anahtarı: changeme 
 
 **1. Yan Menüye "Reverse DNS" Linki Ekleme**
 Müşterinin sunucu hizmeti sayfasına, yan menüde bir "Reverse DNS" linki eklemek için WHMCS'in "Server Details" sayfasını hedefleyen bir hook kullanabiliriz. Bu, müşterinin sunucu hizmetine girdiğinde yan menüde "Reverse DNS" seçeneğinin görünmesini sağlar.
