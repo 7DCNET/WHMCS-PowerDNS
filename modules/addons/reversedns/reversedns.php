@@ -1,28 +1,28 @@
 <?php
 if (!defined("WHMCS")) {
-    die("Bu dosyaya doğrudan erişim sağlanamaz.");
+    die("This file cannot be accessed directly.");
 }
 
 function reversedns_config() {
     $configarray = array(
-        "name" => "Reverse DNS Yönetimi",
-        "description" => "Müşterilerin atanmış IP adresleri için reverse DNS kayıtlarını güncelleyebilmelerini sağlar.",
+        "name" => "Reverse DNS Management",
+        "description" => "Allows customers to update reverse DNS records for assigned IP addresses.",
         "version" => "1.1",
-        "author" => "Sizin İsminiz",
+        "author" => "7DC.NET",
         "fields" => array(
             "api_url" => array(
                 "FriendlyName" => "PowerDNS API URL",
                 "Type" => "text",
                 "Size" => "50",
-                "Default" => "http://46.253.7.3:8081/api/v1",
-                "Description" => "PowerDNS API'nin temel URL'si",
+                "Default" => "http://46.253.7.3:8082/api/v1",
+                "Description" => "PowerDNS API base URL",
             ),
             "api_key" => array(
-                "FriendlyName" => "PowerDNS API Anahtarı",
+                "FriendlyName" => "PowerDNS API Keys",
                 "Type" => "password",
                 "Size" => "50",
-                "Default" => "changeme",
-                "Description" => "PowerDNS API anahtarınızı girin",
+                "Default" => "",
+                "Description" => "Enter your PowerDNS API key",
             ),
         ),
     );
@@ -30,11 +30,11 @@ function reversedns_config() {
 }
 
 function reversedns_activate() {
-    return array('status' => 'success', 'description' => 'Modül başarıyla etkinleştirildi.');
+    return array('status' => 'success', 'description' => 'The module has been successfully activated.');
 }
 
 function reversedns_deactivate() {
-    return array('status' => 'success', 'description' => 'Modül başarıyla devre dışı bırakıldı.');
+    return array('status' => 'success', 'description' => 'The module has been successfully disabled.');
 }
 
 function reversedns_clientarea($vars) {
@@ -48,17 +48,21 @@ function reversedns_clientarea($vars) {
         $ipAddresses = array();
         foreach ($result['products']['product'] as $product) {
             if ($product['status'] === 'Active') {
-                $dedicatedip = $product['dedicatedip'];
+                $dedicatedip = $product['assignedips'];
                 if (!empty($dedicatedip)) {
                     $ips = explode(',', $dedicatedip);
                     foreach ($ips as $ip) {
-                        $ipAddresses[] = trim($ip);
+                        $ip = trim($ip);
+                        // Sadece IPv4 adreslerini al
+                        if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
+                            $ipAddresses[] = $ip;
+                        }
                     }
                 }
             }
         }
     } else {
-        $error = 'IP adresleri alınamadı.';
+        $error = 'IP addresses could not be obtained.';
         $ipAddresses = array();
     }
 
@@ -101,15 +105,15 @@ function reversedns_clientarea($vars) {
             if (curl_errno($ch)) {
                 $error = 'CURL Error: ' . curl_error($ch);
             } else if ($httpCode == 204) {
-                $success = 'Reverse DNS kaydı başarıyla güncellendi.';
+                $success = 'The Reverse DNS record has been updated successfully.';
                 // Başarı mesajını gösterip yönlendirmeyi JavaScript ile yapacağız
                 $redirect = true;
             } else {
-                $error = 'Güncelleme sırasında bir hata oluştu. HTTP Kodu: ' . $httpCode . ' Yanıt: ' . $response;
+                $error = 'An error occurred during the update. HTTP Code: ' . $httpCode . ' Response: ' . $response;
             }
             curl_close($ch);
         } else {
-            $error = 'Geçersiz IP adresi veya hostname.';
+            $error = 'Invalid IP address or hostname.';
         }
     }
 
@@ -129,7 +133,7 @@ function reversedns_clientarea($vars) {
         if (curl_errno($ch)) {
             $error = 'CURL Error: ' . curl_error($ch);
         } else if ($httpCode != 200) {
-            $error = 'Zone bilgisi alınamadı. HTTP Kodu: ' . $httpCode . ' Yanıt: ' . $response;
+            $error = 'Zone information could not be obtained. HTTP Code: ' . $httpCode . ' Response: ' . $response;
             $zoneData = array(); // Zone bilgisi alınamadıysa boş dizi atama
         } else {
             $zoneData = json_decode($response, true);
@@ -160,8 +164,8 @@ function reversedns_clientarea($vars) {
     );
 
     return array(
-        'pagetitle' => 'Reverse DNS Yönetimi',
-        'breadcrumb' => array('index.php?m=reversedns' => 'Reverse DNS Yönetimi'),
+        'pagetitle' => 'Reverse DNS Management',
+        'breadcrumb' => array('index.php?m=reversedns' => 'Reverse DNS Management'),
         'templatefile' => 'clientarea',
         'requirelogin' => true,
         'vars' => $vars,
