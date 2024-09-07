@@ -1,51 +1,23 @@
-### Kurulum Talimatları
+## Özet Kurulum Adımları
 
-**1. Modül Dosyalarını Yükleyin:**
+1. **Dosyaları Yükleyin:**
 
-- modules/addons/reversedns/ dizinini oluşturun.
-- Yukarıdaki kodları kullanarak aşağıdaki dosyaları oluşturun ve bu dizine yerleştirin:
-	- reversedns.php
-	- hooks.php
-- modules/addons/reversedns/templates/ dizinini oluşturun ve içine clientarea.tpl dosyasını koyun.
+	- modules/addons/reversedns/reversedns.php
+	- modules/addons/reversedns/hooks.php
+	- modules/addons/reversedns/templates/clientarea.tpl
 
-**2. Modülü Etkinleştirin:**
+2. **Menüye Reverse DNS Linkini Ekleyin:**
+
+	- hooks.php dosyasına yukarıdaki kodu ekleyerek sunucu hizmet detay sayfasına "Reverse DNS" menüsünü ekleyin.
+
+**3. Modülü Etkinleştirin:**
 
 - WHMCS yönetici paneline giriş yapın.
 - **Eklentiler (Addons) > Eklenti Modülleri (Addon Modules)** bölümüne gidin.
 - "Reverse DNS Yönetimi" modülünü bulun ve **Etkinleştir (Activate)** butonuna tıklayın.
 - **Yapılandır (Configure)** seçeneğine tıklayarak PowerDNS API URL'sini ve API anahtarınızı girin:
-	- PowerDNS API URL: http://powerdns-server/api/v1
+	- PowerDNS API URL: https://powerdns-server/api/v1
 	- PowerDNS API Anahtarı: changeme 
-
-**1. Yan Menüye "Reverse DNS" Linki Ekleme**
-Müşterinin sunucu hizmeti sayfasına, yan menüde bir "Reverse DNS" linki eklemek için WHMCS'in "Server Details" sayfasını hedefleyen bir hook kullanabiliriz. Bu, müşterinin sunucu hizmetine girdiğinde yan menüde "Reverse DNS" seçeneğinin görünmesini sağlar.
-
-hooks.php **Dosyasına Gerekli Hook'u Ekleyin**
-Bu hook, sunucunun detay sayfasına bir "Reverse DNS" menü öğesi ekleyecek.
-
-```php
-<?php
-add_hook('ClientAreaPrimarySidebar', 1, function($primarySidebar) {
-    // Müşteri oturum açmış mı?
-    if (!isset($_SESSION['uid'])) {
-        return;
-    }
-
-    // Sunucu ürünleri sayfasındaysak
-    if ($primarySidebar->getChild('Service Details Actions')) {
-        // Yan menüye Reverse DNS öğesi ekleyelim
-        $reverseDNSMenuItem = $primarySidebar->getChild('Service Details Actions')->addChild('reverse_dns', array(
-            'label' => 'Reverse DNS',
-            'uri' => 'index.php?m=reversedns&serviceid=' . (int) $_GET['id'],
-            'order' => 15, // Menüdeki sıralama
-        ));
-    }
-});
-?>
-
-```
-
-Bu kod sayesinde müşteri, sunucu hizmeti detaylarına girdiğinde yan menüde "Reverse DNS" linkini görecek.
 
 **4. Gereksinimler:**
 
