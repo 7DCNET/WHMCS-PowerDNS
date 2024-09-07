@@ -42,11 +42,18 @@ function reversedns_clientarea($vars) {
     $apiUrl = $vars['api_url'];
     $apiKey = $vars['api_key'];
 
-    // Müşterinin aktif ürünlerini al
+    // URL'den seçili serviceid'yi al
+    $selectedServiceId = isset($_GET['serviceid']) ? (int)$_GET['serviceid'] : null;
+
+    // Müşterinin ürünlerini al ve seçilen ürün ID'sine ait IP adreslerini filtrele
+    $ipAddresses = array();
     $result = localAPI('GetClientsProducts', array('clientid' => $userid));
     if (isset($result['products']['product'])) {
-        $ipAddresses = array();
         foreach ($result['products']['product'] as $product) {
+            if ($selectedServiceId && $product['id'] != $selectedServiceId) {
+                continue; // Eğer serviceid uyuşmuyorsa atla
+            }
+
             if ($product['status'] === 'Active') {
                 $dedicatedip = $product['assignedips'];
                 if (!empty($dedicatedip)) {
@@ -62,8 +69,7 @@ function reversedns_clientarea($vars) {
             }
         }
     } else {
-        $error = 'IP addresses could not be obtained.';
-        $ipAddresses = array();
+        $error = 'IP adresleri alınamadı.';
     }
 
     // Form gönderildi mi?
