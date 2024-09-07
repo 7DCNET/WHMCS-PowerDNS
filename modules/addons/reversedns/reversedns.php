@@ -14,7 +14,7 @@ function reversedns_config() {
                 "FriendlyName" => "PowerDNS API URL",
                 "Type" => "text",
                 "Size" => "50",
-                "Default" => "http://46.253.7.3:8082/api/v1",
+                "Default" => "http://127.0.0.1:8081/api/v1",
                 "Description" => "PowerDNS API base URL",
             ),
             "api_key" => array(
