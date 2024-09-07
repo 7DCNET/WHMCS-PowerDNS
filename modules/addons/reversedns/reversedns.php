@@ -72,7 +72,7 @@ function reversedns_clientarea($vars) {
         $newRDNS = $_POST['new_rdns'][$ipToUpdate];
 
         // Girdi doğrulama
-        if (filter_var($ipToUpdate, FILTER_VALIDATE_IP) && preg_match('/^([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,}$/', $newRDNS)) {
+        if (filter_var($ipToUpdate, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4) && preg_match('/^([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,}$/', $newRDNS)) {
             // PowerDNS API ile güncelle
             $ptrRecord = array(
                 'rrsets' => array(
