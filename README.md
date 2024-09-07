@@ -16,7 +16,7 @@
 - **Eklentiler (Addons) > Eklenti Modülleri (Addon Modules)** bölümüne gidin.
 - "Reverse DNS Yönetimi" modülünü bulun ve **Etkinleştir (Activate)** butonuna tıklayın.
 - **Yapılandır (Configure)** seçeneğine tıklayarak PowerDNS API URL'sini ve API anahtarınızı girin:
-	- PowerDNS API URL: https://powerdns-server/api/v1
+	- PowerDNS API URL: http://powerdns-server:8081/api/v1
 	- PowerDNS API Anahtarı: changeme 
 
 **4. Gereksinimler:**
