@@ -8,11 +8,6 @@
     <div class="alert alert-success">
         {$success}
     </div>
-    <script type="text/javascript">
-        setTimeout(function() {
-            window.location.href = "index.php?m=reversedns";
-        }, 4000); // 4 saniye sonra yönlendir
-    </script>
 {/if}
 {if $error}
     <div class="alert alert-danger">
@@ -35,6 +30,7 @@
                         <td>{$ip.current_rdns}</td>
                         <td>
                             <input type="text" name="new_rdns[{$ip.address}]" value="{$ip.current_rdns}" class="form-control" />
+
                         </td>
                         <td>
                             <button type="submit" name="update_rdns" value="{$ip.address}" class="btn btn-primary">Update</button>
